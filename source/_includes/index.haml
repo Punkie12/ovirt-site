@@ -1,0 +1,15 @@
+:ruby
+  def page_title(p)
+    (p.data && p.data.title) || p.url.split('/').last.parameterize.titleize
+  end
+
+  page_list = site.pages.select{|p| p.data and p.url.start_with?(page.url) }.sort_by {|p| page_title(p).downcase }
+
+%h1= "#{page_title(page)}"
+
+%ul
+  - page_list.each do |p|
+    - next if p.url == page.url
+    %li
+      %a{:href => p.url, :title => page_title(p)}
+
